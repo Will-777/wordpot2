@@ -1,9 +1,9 @@
-# Wordpot
+# Wordpot2
 
-Wordpot is a Wordpress honeypot which detects probes for plugins, themes, timthumb and other common files used to fingerprint a wordpress installation.
+Wordpot2 is a Wordpress honeypot which detects probes for plugins, themes, timthumb and other common files used to fingerprint a wordpress installation.
    
-    $ python wordpot.py --help
-    Usage: wordpot.py [options]
+    $ python wordpot2.py --help
+    Usage: wordpot2.py [options]
     
     Options:
       -h, --help        show this help message and exit
@@ -21,15 +21,15 @@ To configure the honeypot you can edit the config file `wordpot.conf` or provide
 
 You can use a wordpress theme as you would in a normal Wordpress installation by putting the theme folder in the `static/wp-content/themes/` directory. You might also need to edit the html skeleton which is stored in the `templates/` folder and should be named as your theme (e.g. `themename.html`) - take a look at `twentyeleven.html` to see how it works. 
 
-To use the theme start wordpot with the theme option (default value is `twentyeleven`):
+To use the theme start wordpot2 with the theme option (default value is `twentyeleven`):
     
-    $ python wordpot --theme=THEMENAME
+    $ python wordpot2 --theme=THEMENAME
 
 Templates are built with the [Jinja2](http://jinja.pocoo.org) template engine.
 
 ## Expandable with plugins (*beta*)
 
-Wordpot can be expanded with plugins to improve its behaviour or just expand some functionalities.
+wordpot2 can be expanded with plugins to improve its behaviour or just expand some functionalities.
 
 For example you can write a plugin to mimick a particular vulnerability in a Wordpress plugin or theme.
 
@@ -37,7 +37,7 @@ Learn more in the dedicated [wiki page](https://github.com/gbrindisi/wordpot/wik
 
 ## Links
 
-* Project Homepage: http://brindi.si/g/projects/wordpot.html
+* Original Project Homepage: http://brindi.si/g/projects/wordpot.html
 
 ## License
 
