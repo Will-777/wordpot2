@@ -1,7 +1,7 @@
 # Wordpot2
 
 Wordpot2 is a Wordpress honeypot which detects probes for plugins, themes, timthumb and other common files used to fingerprint a wordpress installation.
-The original program is wordpot from Brindisi.
+Wordpot2 is a fork of Worpot project from Brindisi. The link is here:
 https://github.com/gbrindisi/wordpot
 
 It is a tentative to move this working Python2 script with Flask version 0.x to
