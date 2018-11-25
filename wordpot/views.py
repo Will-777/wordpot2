@@ -22,8 +22,13 @@ def commons(filename=None, ext=None):
             if 'template_vars' in p.outputs:
                 return render_template(p.outputs['template'], vars=p.outputs['template_vars'])
             return render_template(p.outputs['template'], vars={})
-   
-    if filename is None and ext is None:
+
+    # start - this part of code should be removed once for p in pn.hook will be fixed.
+    if filename == 'wp-login' and (ext == 'php' or ext == None):
+        return render_template('wp-login.html', vars={})
+    # end of code to remove
+    
+    elif filename is None and ext is None:
         return render_template(TEMPLATE, vars={})
     elif filename == 'index' and ext == 'php':
         return render_template(TEMPLATE, vars={})
