@@ -19,16 +19,12 @@ def commons(filename=None, ext=None):
         if 'log_json' in p.outputs and app.config['HPFEEDS_ENABLED']:
             app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
         if 'template' in p.outputs:
+            
             if 'template_vars' in p.outputs:
                 return render_template(p.outputs['template'], vars=p.outputs['template_vars'])
             return render_template(p.outputs['template'], vars={})
-
-    # start - this part of code should be removed once for p in pn.hook will be fixed.
-    if filename == 'wp-login' and (ext == 'php' or ext == None):
-        return render_template('wp-login.html', vars={})
-    # end of code to remove
     
-    elif filename is None and ext is None:
+    if filename is None and ext is None: 
         return render_template(TEMPLATE, vars={})
     elif filename == 'index' and ext == 'php':
         return render_template(TEMPLATE, vars={})
@@ -52,10 +48,8 @@ def admin(subpath='/'):
             app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
         if 'template' in p.outputs:
             if 'template_vars' in p.outputs:
-                return render_template(p.outputs['template'], vars=p.outputs['template_vars']) #just test
-                #return 'user on 1st loop'
+                return render_template(p.outputs['template'], vars=p.outputs['template_vars']) 
             return render_template(p.outputs['template'], vars={})
-            #return "yser admin on 2nd loop"
     
     return redirect('wp-login.php')
 

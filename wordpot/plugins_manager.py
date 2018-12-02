@@ -49,10 +49,8 @@ class BasePlugin(object):
         self.version        = None
         
         self.slug           = None
-        # self.hooks          = None
-        #self.hooks          = "" # OK
-        self.hooks          = {}
-
+        self.hooks          = None
+        
         self.request        = None
 
         self.inputs         = {}
@@ -61,7 +59,7 @@ class BasePlugin(object):
     def _load_config(self, slug=None):
         self.slug = slug
         try:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             plugin_config = os.path.join(CURRENTPATH, 'plugins/%s.ini' % self.slug)
 
             config.read(plugin_config)
@@ -73,7 +71,6 @@ class BasePlugin(object):
             self.version = config.get('plugin', 'version')
 
             self.hooks = [v.strip() for v in config.get('plugin', 'hooks').split(',')]
-        #except Exception, e:
         except Exception as e:
             pass
     
@@ -83,11 +80,10 @@ class BasePlugin(object):
         self.outputs = {}
 
         # Parse arguments 
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             self.inputs[k] = v
         try:
             self.run()
-        #except Exception, e:
         except Exception as e:
             LOGGER.error('Unable to run plugin: %s\n%s', self.name, e.message)
 

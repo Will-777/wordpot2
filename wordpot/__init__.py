@@ -7,10 +7,10 @@ except ImportError:
     print ("   $ pip install flask\n")
     exit()
 
-from optparse import OptionParser #OK
-from wordpot.logger import * # K.O !
-from werkzeug.routing import BaseConverter # OK
-from wordpot.plugins_manager import PluginsManager # K.O !
+from optparse import OptionParser 
+from wordpot.logger import * 
+from werkzeug.routing import BaseConverter 
+from wordpot.plugins_manager import PluginsManager 
 import os
 
 # ---------------

@@ -13,6 +13,7 @@ class Plugin(BasePlugin):
         origin = self.inputs['request'].remote_addr
 
         if self.inputs['request'].method == 'POST':
+            print("Confirmed that POST = {}".format(self.inputs['request'].method))
             username = self.inputs['request'].form['log']
             password = self.inputs['request'].form['pwd']
             self.outputs['log'] = '%s tried to login with username %s and password %s' % (origin, username, password)
