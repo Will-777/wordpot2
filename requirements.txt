@@ -1,8 +1,13 @@
-click==6.7
-Flask==1.0.2
-hpfeeds-threatstream==1.1
-itsdangerous==0.24
-Jinja2==2.10
-MarkupSafe==1.0
-Werkzeug==0.14.1
+# Core Flask - Modern Stack (Python 3.10+ compatible)
+Flask==3.0.3
+Werkzeug==3.0.3
+Jinja2==3.1.4
+MarkupSafe==2.1.5
+itsdangerous==2.2.0
+click==8.1.7
 
+# Honeypot specific
+# hpfeeds3==0.9.10  # Décommente si tu utilises hpfeeds
+
+# Development
+python-dotenv==1.0.1

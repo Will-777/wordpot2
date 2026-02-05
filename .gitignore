@@ -1,7 +1,44 @@
-*.log
-.*
-*.pyc
-!.gitignore
-/env
-/venv
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
+# Virtualenv
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Config perso (secrets !)
+wordpot_local.conf
+
+# OS
+.DS_Store
+Thumbs.db
