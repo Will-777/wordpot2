@@ -7,7 +7,7 @@ except ImportError:
     print ("   $ pip install flask\n")
     exit()
 
-from optparse import OptionParser 
+import argparse 
 from wordpot.logger import * 
 from werkzeug.routing import BaseConverter 
 from wordpot.plugins_manager import PluginsManager 
@@ -36,21 +36,20 @@ REQUIRED_OPTIONS = {
 
 
 def parse_options():
-    usage = "usage: %prog [options]"
+    description = "Wordpot2 - Honeypot WordPress moderne"
 
-    parser = OptionParser(usage=usage)
-    parser.add_option('--host', dest='HOST', help='Host address')
-    parser.add_option('--port', dest='PORT', help='Port number')
-    parser.add_option('--title', dest='BLOGTITLE', help='Blog title')
-    parser.add_option('--theme', dest='THEME', help='Default theme name')
-    parser.add_option('--plugins', dest='PLUGINS', help='Fake installed plugins')
-    parser.add_option('--themes', dest='THEMES', help='Fake installed themes')
-    parser.add_option('--ver', dest='VERSION', help='Wordpress version')
-    parser.add_option('--server', dest='SERVER', help='Custom "Server" header')
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--host', dest='HOST', help='Host address')
+    parser.add_argument('--port', dest='PORT', help='Port number')
+    parser.add_argument('--title', dest='BLOGTITLE', help='Blog title')
+    parser.add_argument('--theme', dest='THEME', help='Default theme name')
+    parser.add_argument('--plugins', dest='PLUGINS', help='Fake installed plugins (comma-separated)')
+    parser.add_argument('--themes', dest='THEMES', help='Fake installed themes (comma-separated)')
+    parser.add_argument('--ver', dest='VERSION', help='Wordpress version')
+    parser.add_argument('--server', dest='SERVER', help='Custom "Server" header')
 
-    (options, args) = parser.parse_args()
+    options = parser.parse_args()
     
-    # for opt, val in options.__dict__.iteritems():
     for opt, val in options.__dict__.items():
         if val is not None:
             if opt in ['PLUGINS', 'THEMES']:
