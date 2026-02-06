@@ -1,69 +1,413 @@
 <!DOCTYPE html>
-	<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
-	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>{{ config['BLOGTITLE'] }} &rsaquo; Log In</title>
-    <link rel='stylesheet' id='wp-admin-css'  href='{{ url_for("static", _external=True, filename="wp-admin/css/wp-admin.css") }}' type='text/css' media='all' />
-    <link rel='stylesheet' id='colors-fresh-css'  href='{{ url_for("static", _external=True, filename="wp-admin/css/colors-fresh.css") }}' type='text/css' media='all' />
-    <meta name='robots' content='noindex,nofollow' />
-{% if vars['BADLOGIN'] %}
-<script type="text/javascript">
-addLoadEvent = function(func){if(typeof jQuery!="undefined")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};
-function s(id,pos){g(id).left=pos+'px';}
-function g(id){return document.getElementById(id).style;}
-function shake(id,a,d){c=a.shift();s(id,c);if(a.length>0){setTimeout(function(){shake(id,a,d);},d);}else{try{g(id).position='static';wp_attempt_focus();}catch(e){}}}
-addLoadEvent(function(){ var p=new Array(15,30,15,0,-15,-30,-15,0);p=p.concat(p.concat(p));var i=document.forms[0].id;g(i).position='relative';shake(i,p,20);});
-</script>
-{% endif %}
-	</head>
-	<body class="login">
-	<div id="login">
-		<h1><a href="http://wordpress.org/" title="Powered by WordPress">Test</a></h1>
-        {% if vars['BADLOGIN'] %}
-        <div id="login_error">	<strong>ERROR</strong>: Invalid username. <a href="wp-login.php?action=lostpassword" title="Password Lost and Found">Lost your password</a>?<br />
-</div>
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Log In &lsaquo; {{ config['BLOGTITLE'] }} &#8212; WordPress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="WordPress {{ config['VERSION'] }}">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Fonts Google Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* WordPress 6.4 Login - Style officiel */
+        :root {
+            --wp-admin-theme-color: #2271b1;
+            --wp-admin-theme-color-darker-10: #135e96;
+            --wp-admin-theme-color-darker-20: #0a4b78;
+            --wp-border-radius: 4px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #3c434a;
+            background: #f0f0f1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Login Container */
+        #login {
+            width: 320px;
+            margin: auto;
+            padding: 20px;
+        }
+        
+        /* WordPress Logo */
+        .login-logo {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .login-logo a {
+            display: block;
+            width: 84px;
+            height: 84px;
+            margin: 0 auto;
+            background: #2271b1;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .login-logo a::before {
+            content: "W";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 48px;
+            font-weight: 700;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+        
+        /* Error Message */
+        {% if vars.BADLOGIN %}
+        #login_error {
+            background: #fcf0f1;
+            border-left: 4px solid #d63638;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 0 var(--wp-border-radius) var(--wp-border-radius) 0;
+            font-size: 13px;
+            line-height: 1.5;
+            animation: shake 0.3s ease-in-out;
+        }
+        
+        #login_error strong {
+            color: #d63638;
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
         {% endif %}
-<form name="loginform" id="loginform" action="wp-login.php" method="post">
-	<p>
-		<label for="user_login">Username<br />
-		<input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="10" /></label>
-	</p>
-	<p>
-		<label for="user_pass">Password<br />
-		<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="20" /></label>
-	</p>
-	<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="90" /> Remember Me</label></p>
-	<p class="submit">
-		<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Log In" tabindex="100" />
-		<input type="hidden" name="redirect_to" value=/wp-admin/" />
-		<input type="hidden" name="testcookie" value="1" />
-	</p>
-</form>
+        
+        /* Form Container */
+        .login-form-container {
+            background: #fff;
+            border-radius: var(--wp-border-radius);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            padding: 26px 24px 34px;
+            margin-bottom: 20px;
+        }
+        
+        /* Form Elements */
+        .login-form {
+            margin-top: 8px;
+        }
+        
+        .form-field {
+            margin-bottom: 16px;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #3c434a;
+            line-height: 1.5;
+        }
+        
+        .form-field input[type="text"],
+        .form-field input[type="password"] {
+            width: 100%;
+            padding: 6px 12px;
+            font-size: 24px;
+            line-height: 1.33333333;
+            border: 1px solid #8c8f94;
+            border-radius: var(--wp-border-radius);
+            background: #fff;
+            color: #2c3338;
+            transition: all 0.15s ease-in-out;
+            -webkit-appearance: none;
+        }
+        
+        .form-field input:focus {
+            border-color: #2271b1;
+            box-shadow: 0 0 0 1px #2271b1;
+            outline: 2px solid transparent;
+        }
+        
+        /* Password wrapper */
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #646970;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 2px;
+        }
+        
+        .show-password:hover {
+            color: #2271b1;
+        }
+        
+        /* Remember Me */
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 16px 0;
+            font-size: 12px;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #8c8f94;
+            border-radius: 2px;
+            margin: 0;
+        }
+        
+        .remember-me label {
+            font-size: 12px;
+            color: #3c434a;
+            line-height: 1.5;
+        }
+        
+        /* Submit Button */
+        .wp-submit {
+            width: 100%;
+            background: #2271b1;
+            color: #fff;
+            border: none;
+            border-radius: var(--wp-border-radius);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: background 0.15s;
+            margin-top: 8px;
+            float: none;
+        }
+        
+        .wp-submit:hover {
+            background: #135e96;
+        }
+        
+        .wp-submit:focus {
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+            outline: 2px solid transparent;
+        }
+        
+        /* Nav Links */
+        .login-nav {
+            margin: 24px 0 0;
+            font-size: 13px;
+            color: #50575e;
+        }
+        
+        .login-nav a {
+            color: #50575e;
+            text-decoration: none;
+        }
+        
+        .login-nav a:hover {
+            color: #135e96;
+            text-decoration: underline;
+        }
+        
+        .login-nav .sep {
+            color: #c3c4c7;
+            margin: 0 6px;
+        }
+        
+        /* Back to site */
+        .back-to-blog {
+            margin: 24px 0;
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .back-to-blog a {
+            color: #2271b1;
+            text-decoration: none;
+        }
+        
+        .back-to-blog a:hover {
+            color: #135e96;
+            text-decoration: underline;
+        }
+        
+        /* Language Switcher */
+        .language-switcher {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .language-switcher select {
+            background: #fff url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%23555%22%2F%3E%3C%2Fsvg%3E') no-repeat right 8px top 55%;
+            background-size: 16px 16px;
+            border: 1px solid #8c8f94;
+            border-radius: var(--wp-border-radius);
+            padding: 4px 32px 4px 8px;
+            font-size: 13px;
+            color: #2c3338;
+            cursor: pointer;
+            min-height: 32px;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        
+        /* Footer */
+        .login-footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #646970;
+        }
+        
+        .login-footer a {
+            color: #646970;
+            text-decoration: none;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Clearfix */
+        .clear {
+            clear: both;
+        }
+        
+        /* Mobile */
+        @media screen and (max-width: 480px) {
+            #login {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
 
-<p id="nav">
-<a href="/wp-login.php?action=lostpassword" title="Password Lost and Found">Lost your password?</a>
-</p>
-
-<script type="text/javascript">
-function wp_attempt_focus(){
-setTimeout( function(){ try{
-d = document.getElementById('user_login');
-d.focus();
-d.select();
-} catch(e){}
-}, 200);
-}
-
-wp_attempt_focus();
-if(typeof wpOnload=='function')wpOnload();
-</script>
-
-<p id="backtoblog"><a href="/" title="Are you lost?">&larr; Back to {{ blogtitle }}</a></p>
-	
-	</div>
-
-	
-		<div class="clear"></div>
-	</body>
-	</html>
-	
+<body class="login wp-core-ui no-js locale-en-us">
+    
+    <div id="login">
+        
+        <!-- Logo -->
+        <h1 class="login-logo">
+            <a href="https://wordpress.org/" title="Powered by WordPress" tabindex="-1"></a>
+        </h1>
+        
+        <!-- Error Message -->
+        {% if vars.BADLOGIN %}
+        <div id="login_error">
+            <strong>Error:</strong> The username or password you entered is incorrect. <a href="/wp-login.php?action=lostpassword">Lost your password?</a>
+        </div>
+        {% endif %}
+        
+        <!-- Login Form -->
+        <div class="login-form-container">
+            <form name="loginform" id="loginform" action="/wp-login.php" method="post">
+                
+                <p class="form-field">
+                    <label for="user_login">Username or Email Address</label>
+                    <input type="text" name="log" id="user_login" class="input" value="" size="20" autocapitalize="off" autocomplete="username" required>
+                </p>
+                
+                <p class="form-field">
+                    <label for="user_pass">Password</label>
+                    <span class="password-wrapper">
+                        <input type="password" name="pwd" id="user_pass" class="input" value="" size="20" autocomplete="current-password" required>
+                        <button type="button" class="show-password" aria-label="Show password">Show</button>
+                    </span>
+                </p>
+                
+                <p class="remember-me">
+                    <input name="rememberme" type="checkbox" id="rememberme" value="forever">
+                    <label for="rememberme">Remember Me</label>
+                </p>
+                
+                <p class="submit">
+                    <input type="submit" name="wp-submit" id="wp-submit" class="wp-submit" value="Log In">
+                    <input type="hidden" name="testcookie" value="1">
+                </p>
+                
+                <div class="clear"></div>
+            </form>
+        </div>
+        
+        <!-- Navigation -->
+        <p class="login-nav">
+            <a href="/wp-login.php?action=lostpassword">Lost your password?</a>
+            <span class="sep">|</span>
+            <a href="/wp-login.php?action=register">Register</a>
+        </p>
+        
+        <!-- Back to site -->
+        <p class="back-to-blog">
+            <a href="/">&larr; Go to {{ config['BLOGTITLE'] }}</a>
+        </p>
+        
+        <!-- Language Switcher -->
+        <div class="language-switcher">
+            <label for="language-switcher" class="screen-reader-text" style="position: absolute; left: -10000px;">Language</label>
+            <select name="language" id="language-switcher">
+                <option value="en_US" selected>English (United States)</option>
+                <option value="fr_FR">Fran&ccedil;ais</option>
+                <option value="es_ES">Espa&ntilde;ol</option>
+                <option value="de_DE">Deutsch</option>
+                <option value="ja">日本語</option>
+            </select>
+        </div>
+        
+    </div>
+    
+    <!-- Footer -->
+    <div class="login-footer">
+        <p>Powered by <a href="https://wordpress.org/">WordPress</a> {{ config['VERSION'] }}</p>
+    </div>
+    
+    <script>
+        // Simple show/hide password toggle
+        document.querySelector('.show-password').addEventListener('click', function() {
+            var pwd = document.getElementById('user_pass');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                this.textContent = 'Hide';
+            } else {
+                pwd.type = 'password';
+                this.textContent = 'Show';
+            }
+        });
+        
+        // Remove no-js class (WordPress does this)
+        document.body.classList.remove('no-js');
+    </script>
+    
+</body>
+</html>

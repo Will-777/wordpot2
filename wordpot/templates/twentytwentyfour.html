@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config['BLOGTITLE'] }} – {{ config['BLOGSUBTITLE'] }}</title>
+    <meta name="description" content="{{ config['BLOGSUBTITLE'] }}">
+    <meta name="generator" content="WordPress {{ config['VERSION'] }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+    
+    <!-- Fonts from theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- CSS Variables from theme.json -->
+    <style>
+        :root {
+            --wp--preset--color--base: #f9f9f9;
+            --wp--preset--color--base-2: #ffffff;
+            --wp--preset--color--contrast: #111111;
+            --wp--preset--color--contrast-2: #636363;
+            --wp--preset--color--contrast-3: #A4A4A4;
+            --wp--preset--color--accent: #cfcabe;
+            --wp--preset--color--accent-2: #c2a990;
+            --wp--preset--color--accent-3: #d8613c;
+            --wp--preset--color--accent-4: #b1c5a4;
+            --wp--preset--color--accent-5: #b5bdbc;
+            
+            --wp--preset--font-family--body: 'Inter', sans-serif;
+            --wp--preset--font-family--heading: 'Cardo', serif;
+            
+            --wp--preset--spacing--10: 1rem;
+            --wp--preset--spacing--20: min(1.5rem, 2vw);
+            --wp--preset--spacing--30: min(2.5rem, 3vw);
+            --wp--preset--spacing--40: min(4rem, 5vw);
+            --wp--preset--spacing--50: min(6.5rem, 8vw);
+            --wp--preset--spacing--60: min(10.5rem, 13vw);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--wp--preset--font-family--body);
+            font-size: 1.05rem;
+            line-height: 1.55;
+            color: var(--wp--preset--color--contrast);
+            background-color: var(--wp--preset--color--base);
+        }
+        
+        /* Header */
+        .site-header {
+            background-color: var(--wp--preset--color--base);
+            padding: 20px var(--wp--preset--spacing--50);
+            border-bottom: 1px solid transparent;
+        }
+        
+        .header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .site-branding {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .site-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--wp--preset--color--contrast);
+            color: var(--wp--preset--color--base);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            text-decoration: none;
+        }
+        
+        .site-title {
+            font-family: var(--wp--preset--font-family--body);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .site-title a {
+            color: var(--wp--preset--color--contrast);
+            text-decoration: none;
+        }
+        
+        /* Navigation */
+        .main-navigation ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        .main-navigation a {
+            color: var(--wp--preset--color--contrast);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .main-navigation a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Main Content - Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        .hero-title {
+            font-family: var(--wp--preset--font-family--heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: var(--wp--preset--spacing--20);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--wp--preset--color--contrast-2);
+            max-width: 600px;
+            margin: 0 auto var(--wp--preset--spacing--30);
+        }
+        
+        .hero-button {
+            display: inline-block;
+            background-color: var(--wp--preset--color--contrast);
+            color: var(--wp--preset--color--base);
+            padding: 0.6rem 1.5rem;
+            border-radius: 0.33rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: var(--wp--preset--spacing--40);
+            transition: background-color 0.2s;
+        }
+        
+        .hero-button:hover {
+            background-color: var(--wp--preset--color--contrast-2);
+        }
+        
+        /* Hero Image */
+        .hero-image {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: var(--wp--preset--spacing--20);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Content Section */
+        .content-section {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50);
+        }
+        
+        .article {
+            margin-bottom: var(--wp--preset--spacing--40);
+        }
+        
+        .article-header {
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+        
+        .article-title {
+            font-family: var(--wp--preset--font-family--heading);
+            font-size: 1.85rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-title a {
+            color: var(--wp--preset--color--contrast);
+            text-decoration: none;
+        }
+        
+        .article-title a:hover {
+            text-decoration: underline;
+        }
+        
+        .article-meta {
+            font-size: 0.9rem;
+            color: var(--wp--preset--color--contrast-2);
+        }
+        
+        .article-meta a {
+            color: var(--wp--preset--color--contrast-2);
+            text-decoration: none;
+        }
+        
+        .article-meta a:hover {
+            text-decoration: underline;
+        }
+        
+        .article-content {
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+        
+        .article-content p {
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        .site-footer {
+            background-color: var(--wp--preset--color--base);
+            padding: var(--wp--preset--spacing--40) var(--wp--preset--spacing--50);
+            text-align: center;
+            border-top: 1px solid var(--wp--preset--color--accent);
+        }
+        
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        .footer-credits {
+            font-size: 0.9rem;
+            color: var(--wp--preset--color--contrast-2);
+        }
+        
+        .footer-credits a {
+            color: var(--wp--preset--color--contrast-2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .site-header {
+                padding: 20px;
+            }
+            
+            .header-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .main-navigation ul {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .hero-section,
+            .content-section {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="home blog">
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="site-branding">
+                <a href="/" class="site-logo">✦</a>
+                <h1 class="site-title"><a href="/">{{ config['BLOGTITLE'] }}</a></h1>
+            </div>
+            
+            <nav class="main-navigation">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/blog/">Blog</a></li>
+                    <li><a href="/contact/">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="site-main">
+        
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h2 class="hero-title">A commitment to innovation and sustainability</h2>
+            <p class="hero-description">Études is a pioneering firm that seamlessly merges creativity and functionality to redefine architectural excellence.</p>
+            <a href="/about/" class="hero-button">Learn More</a>
+            
+            <div class="hero-image">
+                <img src="{{ url_for('static', filename='wp-content/themes/' + config['THEME'] + '/images/building-exterior.webp') }}" alt="Modern building exterior">
+            </div>
+        </section>
+        
+        <!-- Articles Section -->
+        <section class="content-section">
+            
+            <article class="article">
+                <header class="article-header">
+                    <h3 class="article-title"><a href="/2024/01/15/hello-world/">Hello world!</a></h3>
+                    <div class="article-meta">
+                        <span class="posted-on">Posted on <time datetime="2024-01-15">January 15, 2024</time></span>
+                        <span class="byline"> by <a href="/author/admin/">{{ config['AUTHORS'][0] }}</a></span>
+                    </div>
+                </header>
+                <div class="article-content">
+                    <p>Welcome to WordPress. This is your first post. Edit or delete it, then start writing! We're excited to share our journey with you.</p>
+                </div>
+            </article>
+            
+            <article class="article">
+                <header class="article-header">
+                    <h3 class="article-title"><a href="/2024/01/10/sample-post/">Sample Post</a></h3>
+                    <div class="article-meta">
+                        <span class="posted-on">Posted on <time datetime="2024-01-10">January 10, 2024</time></span>
+                        <span class="byline"> by <a href="/author/admin/">{{ config['AUTHORS'][0] }}</a></span>
+                    </div>
+                </header>
+                <div class="article-content">
+                    <p>This is a sample post to demonstrate the theme functionality. In a real WordPress site, this would contain valuable content for your visitors.</p>
+                </div>
+            </article>
+            
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p class="footer-credits">
+                Proudly powered by <a href="https://wordpress.org/">WordPress</a> · 
+                Theme: <a href="https://wordpress.org/themes/twentytwentyfour/">Twenty Twenty-Four</a>
+            </p>
+            <p class="footer-credits">&copy; 2024 {{ config['BLOGTITLE'] }}. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Fake WordPress scripts -->
+    <script>
+        window._wpemojiSettings = {
+            "baseUrl": "https://s.w.org/images/core/emoji/14.0.0/72x72/",
+            "ext": ".png",
+            "svgUrl": "https://s.w.org/images/core/emoji/14.0.0/svg/",
+            "svgExt": ".svg",
+            "source": {
+                "concatemoji": "/wp-includes/js/wp-emoji-release.min.js?ver={{ config['VERSION'] }}"
+            }
+        };
+    </script>
+    
+</body>
+</html>
