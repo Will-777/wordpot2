@@ -82,8 +82,8 @@ conffile = os.path.join(os.path.abspath(os.path.dirname(__file__)), '../wordpot.
 LOGGER.info('Loading conf file: %s', conffile) # %s doesn't work with python3
 try:
     app.config.from_pyfile(conffile)
-except:
-    LOGGER.error('Can\'t load conf file')
+except Exception as e:
+    LOGGER.error("Can't load conf file: %s", str(e))
 check_options()
 
 if app.config['HPFEEDS_ENABLED']:
@@ -97,7 +97,7 @@ if app.config['HPFEEDS_ENABLED']:
     )
     app.config['hpfeeds_client'].s.settimeout(0.01)
 else:
-    LOGGER.warn('hpfeeds is disabled')
+    LOGGER.warning('hpfeeds is disabled')
 
 
 # ------------------------

@@ -3,14 +3,16 @@
 try:
     from flask import Flask
 except ImportError:
-    print ("\n[X] Please install Flask:")
-    print ("   $ pip install flask\n")
+    print("\n[X] Please install Flask:")
+    print("   $ pip install flask\n")
     exit()
 
 from wordpot import app, pm, parse_options, check_options 
 from wordpot.logger import *
 import os
 
+# app is exposed here at module level so gunicorn can find it
+# Usage: gunicorn wordpot2:app
 check_options()
 
 if __name__ == '__main__':

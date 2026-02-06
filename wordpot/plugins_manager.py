@@ -85,7 +85,7 @@ class BasePlugin(object):
         try:
             self.run()
         except Exception as e:
-            LOGGER.error('Unable to run plugin: %s\n%s', self.name, e.message)
+            LOGGER.error('Unable to run plugin: %s\n%s', self.name, str(e))
 
     def run(self):
         return
