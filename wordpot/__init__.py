@@ -74,7 +74,7 @@ logging_setup()
 # Building app
 # ------------
 
-app = Flask('wordpot')
+app = Flask('wordpot', static_url_path='')
 app.url_map.converters['regex'] = RegexConverter
 
 # Import config from file
