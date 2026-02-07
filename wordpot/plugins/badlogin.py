@@ -13,12 +13,12 @@ class Plugin(BasePlugin):
         origin = self.inputs['request'].remote_addr
 
         if self.inputs['request'].method == 'POST':
-            print("Confirmed that POST = {}".format(self.inputs['request'].method))
-            username = self.inputs['request'].form['log']
-            password = self.inputs['request'].form['pwd']
+            username = self.inputs['request'].form.get('log', '')
+            password = self.inputs['request'].form.get('pwd', '')
             self.outputs['log'] = '%s tried to login with username %s and password %s' % (origin, username, password)
             self.outputs['log_json'] = self.to_json_log(username=username, password=password, plugin='badlogin')
             self.outputs['template_vars']['BADLOGIN'] = True
+            self.outputs['template_vars']['USERNAME'] = username
             self.outputs['template'] = 'wp-login.html'
         else:
             self.outputs['log'] = '%s probed for the login page' % origin
