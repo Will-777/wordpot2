@@ -1,7 +1,9 @@
 # Wordpot2
 
 A WordPress honeypot that detects probes for plugins, themes, timthumb and other common files used to fingerprint a WordPress installation.
+
 Wordpot2 mimics a **WordPress 6.4.3** site using the **Twenty Twenty-Four** theme (default). It logs all probing attempts including login bruteforce, plugin/theme enumeration, and author discovery.
+
 Originally forked from [Wordpot by Brindisi](https://github.com/gbrindisi/wordpot) (Python 2 / Flask 0.x), fully rewritten for **Python 3.10+ / Flask 3.x**.
 
 ## Quick Start
@@ -11,7 +13,7 @@ pip install -r requirements.txt
 python wordpot2.py --host=127.0.0.1 --port=5000
 ```
 
-Then visit `http://127.0.0.1:5000` — you should see a WordPress-looking site.
+Then visit `http://127.0.0.1:5000` -- you should see a WordPress-looking site.
 
 ## Configuration
 
@@ -47,11 +49,13 @@ Optional: enable [hpfeeds](https://hpfeeds.org/) in `wordpot.conf` to forward JS
 
 ## Theme support
 
-Themes go in `wordpot/static/wp-content/themes/`. Each theme needs a matching HTML template in `wordpot/templates/` (e.g. `twentytwentyfour.html`).
+Themes live in `wordpot/static/wp-content/themes/`. Each theme needs a matching HTML template in `wordpot/templates/` named after the theme (e.g. `twentytwentyfour.html`).
 
 Available themes:
-- `twentytwentyfour` — WordPress 6.4 default (recommended)
-- `twentyeleven` — Legacy theme (in `templates/v2.8/`)
+- `twentytwentyfour` -- WordPress 6.4 default (recommended)
+- `twentyeleven` -- Legacy theme (in `templates/v2.8/`)
+
+Note: Flask serves static files with `static_url_path=''` so assets are served under `/wp-content/` (not `/static/wp-content/`) just like a real WordPress site.
 
 Templates use the [Jinja2](https://jinja.palletsprojects.com/) template engine.
 
@@ -60,23 +64,57 @@ Templates use the [Jinja2](https://jinja.palletsprojects.com/) template engine.
 Wordpot2 is expandable with plugins to simulate specific WordPress vulnerabilities.
 
 Built-in plugins:
-- **badlogin** — Captures login credentials
-- **commonfiles** — Serves readme.html, xmlrpc.php
-- **userenumeration** — Responds to `?author=N` probes
-- **timthumb** — Detects TimThumb/Uploadify probes
+- **badlogin** -- Captures login credentials
+- **commonfiles** -- Serves readme.html, xmlrpc.php
+- **userenumeration** -- Responds to `?author=N` probes
+- **timthumb** -- Detects TimThumb/Uploadify probes
 
 See the [wiki](https://github.com/gbrindisi/wordpot/wiki/Plugins) for writing custom plugins.
 
+## WPScan validation
+
+Tested with WPScan 3.8.28:
+- [x] WordPress 6.4.3 detected (via Meta Generator + readme.html)
+- [x] Theme Twenty Twenty-Four identified
+- [x] User enumeration working
+- [x] Proper `/wp-content/` paths (no `/static/` leak)
+- [ ] Plugin fingerprints not yet detectable
+- [ ] User enumeration needs WordPress-style `/author/` redirects
+
 ## Docker deployment
 
-For Docker/production deployment with Nginx and WPScan testing, see [ITSupportAsia](https://github.com/Will-777/ITSupportAsia) (private repo).
+Wordpot2 runs standalone with `python wordpot2.py`, but for production you'll want gunicorn behind a reverse proxy. Here's how:
 
-## WPScan results
+### Dockerfile example
 
-Tested with WPScan 3.8.28 — the honeypot is successfully identified as:
-- ✅ WordPress 6.4.3 (via Meta Generator + readme.html)
-- ✅ Theme: Twenty Twenty-Four
-- ✅ User enumeration working
+```dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir gunicorn
+
+# Important: suppress gunicorn's Server header so Flask can spoof Apache
+RUN printf 'import gunicorn.http.wsgi\n\
+_orig = gunicorn.http.wsgi.Response.default_headers\n\
+def _no_server(self):\n\
+    return [h for h in _orig(self) if not h.lower().startswith("server:")]\n\
+gunicorn.http.wsgi.Response.default_headers = _no_server\n' > /opt/gunicorn.conf.py
+
+COPY . .
+EXPOSE 8000
+CMD ["gunicorn", "wordpot2:app", "-c", "/opt/gunicorn.conf.py", "--bind", "0.0.0.0:8000", "--workers", "2"]
+```
+
+### Key tips for realism
+
+- **Server header**: gunicorn overrides Flask's spoofed `Server` header by default. The config above fixes that so `wordpot.conf`'s `SERVER` value is used instead.
+- **Reverse proxy**: put Nginx in front to add realistic logging and block suspicious paths (`.git`, `.env`, etc.).
+- **Test with WPScan**: always validate your setup with `wpscan --url http://your-honeypot --enumerate u,vp,vt` to check what leaks.
 
 ## Links
 
