@@ -15,6 +15,9 @@ python wordpot2.py --host=127.0.0.1 --port=5000
 
 Then visit `http://127.0.0.1:5000` -- you should see a WordPress-looking site.
 
+
+<img src="wordpot/docs/demo2.gif" width="900">
+
 ## Configuration
 
 Edit `wordpot.conf` or use command line arguments:
@@ -47,6 +50,9 @@ All activity is logged to `logs/wordpot.log`:
 
 Optional: enable [hpfeeds](https://hpfeeds.org/) in `wordpot.conf` to forward JSON logs to a centralized collector.
 
+<img src="wordpot/docs/images/wordpot2-login_page.png" width="700">
+
+
 ## Theme support
 
 Themes live in `wordpot/static/wp-content/themes/`. Each theme needs a matching HTML template in `wordpot/templates/` named after the theme (e.g. `twentytwentyfour.html`).
@@ -58,6 +64,9 @@ Available themes:
 Note: Flask serves static files with `static_url_path=''` so assets are served under `/wp-content/` (not `/static/wp-content/`) just like a real WordPress site.
 
 Templates use the [Jinja2](https://jinja.palletsprojects.com/) template engine.
+
+<img src="wordpot/docs/images/wordpot2-home_page.png" width="700">
+
 
 ## Plugins (beta)
 

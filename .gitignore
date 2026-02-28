@@ -42,3 +42,4 @@ wordpot_local.conf
 # OS
 .DS_Store
 Thumbs.db
+*.cast
