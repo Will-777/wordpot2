@@ -26,11 +26,17 @@ class RegexConverter(BaseConverter):
 # Options
 # -------
 
+# Fallbacks used when wordpot.conf is missing or unreadable. They must stay in sync
+# with wordpot.conf: a honeypot that boots on stale defaults and 500s on every request
+# captures nothing at all.
 REQUIRED_OPTIONS = {
         'HOST':  '127.0.0.1',
         'PORT':  '80',
-        'THEME': 'twentyeleven',
+        'THEME': 'twentytwentyfour',
+        'VERSION': '6.4.3',
+        'SERVER': 'Apache/2.4.57 (Ubuntu)',
         'BLOGTITLE': 'Random Rambling',
+        'BLOGSUBTITLE': '',
         'AUTHORS': ['admin']
         }
 
@@ -86,7 +92,7 @@ except Exception as e:
     LOGGER.error("Can't load conf file: %s", str(e))
 check_options()
 
-if app.config['HPFEEDS_ENABLED']:
+if app.config.get('HPFEEDS_ENABLED', False):
     import hpfeeds
     print ('Connecting to hpfeeds broker {}:{}'.format(app.config['HPFEEDS_HOST'], app.config['HPFEEDS_PORT']))
     app.config['hpfeeds_client'] = hpfeeds.new(
@@ -106,7 +112,7 @@ else:
 
 @app.after_request
 def add_server_header(response):
-    if app.config['SERVER']:
+    if app.config.get('SERVER'):
         response.headers['Server'] = app.config['SERVER']
 
     return response
