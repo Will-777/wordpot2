@@ -7,6 +7,7 @@ itsdangerous==2.2.0
 click==8.1.7
 
 # Honeypot specific
+user-agents==2.2.0
 # hpfeeds3==0.9.10  # Décommente si tu utilises hpfeeds
 
 # Development

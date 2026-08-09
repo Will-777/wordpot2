@@ -2,8 +2,17 @@
 
 from flask import request
 from wordpot.logger import *
+from datetime import datetime, timezone
+import json
 import os
 import configparser # ConfigParser has been renamed configparser
+
+try:
+    from user_agents import parse as parse_user_agent
+except ImportError:
+    # Logging must never be the reason the honeypot goes quiet: without the lib we
+    # still emit every field, the parsed User-Agent ones just stay empty.
+    parse_user_agent = None
 
 CURRENTPATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -91,14 +100,39 @@ class BasePlugin(object):
         return
 
     def to_json_log(self, **kwargs):
-        import json
         req = self.inputs['request']
-        return json.dumps(dict(kwargs, 
-            source_ip=req.remote_addr, 
-            source_port=req.environ.get('REMOTE_PORT', '0'),
+        raw_ua = req.user_agent.string
+
+        # Scanners send malformed and hand-crafted User-Agents, so the raw string is
+        # kept alongside the parsed fields rather than replaced by them.
+        ua = {
+            'browser_family': '',
+            'browser_version': '',
+            'os_family': '',
+            'os_version': '',
+            'device_family': '',
+        }
+        if parse_user_agent is not None:
+            try:
+                parsed = parse_user_agent(raw_ua)
+                ua = {
+                    'browser_family': parsed.browser.family,
+                    'browser_version': parsed.browser.version_string,
+                    'os_family': parsed.os.family,
+                    'os_version': parsed.os.version_string,
+                    'device_family': parsed.device.family,
+                }
+            except Exception as e:
+                LOGGER.error('Unable to parse User-Agent: %s', str(e))
+
+        return json.dumps(dict(kwargs,
+            timestamp=datetime.now(timezone.utc).isoformat(),
+            src_ip=req.remote_addr,
+            src_port=req.environ.get('REMOTE_PORT', '0'),
             dest_ip=req.environ.get('SERVER_NAME', ''),
             dest_port=req.environ.get('SERVER_PORT', ''),
-            user_agent=req.user_agent.string,
-            url=req.url
+            user_agent=raw_ua,
+            url=req.url,
+            **ua
         ))
 

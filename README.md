@@ -48,7 +48,35 @@ All activity is logged to `logs/wordpot.log`:
 - Common file probes (readme.html, xmlrpc.php)
 - TimThumb/Uploadify probes
 
-Optional: enable [hpfeeds](https://hpfeeds.org/) in `wordpot.conf` to forward JSON logs to a centralized collector.
+### JSON event format
+
+Every probe also produces a structured JSON event in the same log file, ready for ingestion into ELK or a similar pipeline:
+
+```json
+{
+  "plugin": "badlogin",
+  "username": "admin",
+  "password": "hunter2",
+  "timestamp": "2026-08-09T08:40:41.627868+00:00",
+  "src_ip": "203.0.113.7",
+  "src_port": "54122",
+  "dest_ip": "example.com",
+  "dest_port": "80",
+  "user_agent": "WPScan v3.8.28 (https://wpscan.com/wordpress-security-scanner)",
+  "url": "http://example.com/wp-login.php",
+  "browser_family": "Other",
+  "browser_version": "",
+  "os_family": "Other",
+  "os_version": "",
+  "device_family": "Spider"
+}
+```
+
+The raw `user_agent` string is always kept alongside the parsed `browser_*` / `os_*` / `device_family` fields -- scanners send malformed and hand-crafted User-Agents, and that raw string is often the most useful signal.
+
+> **Breaking change:** as of this version, `source_ip` / `source_port` are renamed **`src_ip` / `src_port`**, and a `timestamp` field is added. This aligns the schema with [T-Pot](https://github.com/telekom-security/tpotce)'s expected field names. Update any parser built against the old format.
+
+Optional: enable [hpfeeds](https://hpfeeds.org/) in `wordpot.conf` to forward the same JSON events to a centralized collector. JSON events are written locally either way.
 
 <img src="wordpot/docs/images/wordpot2-login_page.png" width="700">
 
