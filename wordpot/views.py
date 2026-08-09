@@ -16,8 +16,10 @@ def commons(filename=None, ext=None):
         p.start(filename=filename, ext=ext, request=request)
         if 'log' in p.outputs:
             LOGGER.info(p.outputs['log'])
-        if 'log_json' in p.outputs and app.config['HPFEEDS_ENABLED']:
-            app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
+        if 'log_json' in p.outputs:
+            LOGGER.info(p.outputs['log_json'])
+            if app.config.get('HPFEEDS_ENABLED'):
+                app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
         if 'template' in p.outputs:
             
             if 'template_vars' in p.outputs:
@@ -33,7 +35,7 @@ def commons(filename=None, ext=None):
 
 
 @app.route('/wp-admin', methods=['GET', 'POST'])
-@app.route('/wp-admin<regex("\/.*"):subpath>', methods=['GET', 'POST'])
+@app.route(r'/wp-admin<regex("\/.*"):subpath>', methods=['GET', 'POST'])
 def admin(subpath='/'):
     """ Admin panel probing handler """
     origin = request.remote_addr
@@ -44,8 +46,10 @@ def admin(subpath='/'):
         p.start(subpath=subpath, request=request)
         if 'log' in p.outputs:
             LOGGER.info(p.outputs['log'])
-        if 'log_json' in p.outputs and app.config['HPFEEDS_ENABLED']:
-            app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
+        if 'log_json' in p.outputs:
+            LOGGER.info(p.outputs['log_json'])
+            if app.config.get('HPFEEDS_ENABLED'):
+                app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
         if 'template' in p.outputs:
             if 'template_vars' in p.outputs:
                 return render_template(p.outputs['template'], vars=p.outputs['template_vars']) 
@@ -54,7 +58,7 @@ def admin(subpath='/'):
     return redirect('wp-login.php')
 
 @app.route('/wp-content/plugins/<plugin>', methods=['GET', 'POST'])
-@app.route('/wp-content/plugins/<plugin><regex("(\/.*)"):subpath>', methods=['GET', 'POST'])
+@app.route(r'/wp-content/plugins/<plugin><regex("(\/.*)"):subpath>', methods=['GET', 'POST'])
 def plugin(plugin, subpath='/'):
     """ Plugin probing handler """
     origin = request.remote_addr
@@ -69,8 +73,10 @@ def plugin(plugin, subpath='/'):
         p.start(plugin=plugin, subpath=subpath, request=request)
         if 'log' in p.outputs:
             LOGGER.info(p.outputs['log'])
-        if 'log_json' in p.outputs and app.config['HPFEEDS_ENABLED']:
-            app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
+        if 'log_json' in p.outputs:
+            LOGGER.info(p.outputs['log_json'])
+            if app.config.get('HPFEEDS_ENABLED'):
+                app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
         if 'template' in p.outputs:
             if 'template_vars' in p.outputs:
                 return render_template(p.outputs['template'], vars=p.outputs['template_vars'])
@@ -79,7 +85,7 @@ def plugin(plugin, subpath='/'):
     return render_template(TEMPLATE, vars={})
 
 @app.route('/wp-content/themes/<theme>', methods=['GET', 'POST'])
-@app.route('/wp-content/themes/<theme><regex("(\/.*)"):subpath>', methods=['GET', 'POST'])
+@app.route(r'/wp-content/themes/<theme><regex("(\/.*)"):subpath>', methods=['GET', 'POST'])
 def theme(theme, subpath='/'):
     """ Theme probing handler """
     origin = request.remote_addr
@@ -94,8 +100,10 @@ def theme(theme, subpath='/'):
         p.start(theme=theme, subpath=subpath, request=request)
         if 'log' in p.outputs:
             LOGGER.info(p.outputs['log'])
-        if 'log_json' in p.outputs and app.config['HPFEEDS_ENABLED']:
-            app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
+        if 'log_json' in p.outputs:
+            LOGGER.info(p.outputs['log_json'])
+            if app.config.get('HPFEEDS_ENABLED'):
+                app.config['hpfeeds_client'].publish(app.config['HPFEEDS_TOPIC'], p.outputs['log_json'])
         if 'template' in p.outputs:
             if 'template_vars' in p.outputs:
                 return render_template(p.outputs['template'], vars=p.outputs['template_vars'])
