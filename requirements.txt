@@ -10,4 +10,4 @@ click==8.1.7
 # hpfeeds3==0.9.10  # Décommente si tu utilises hpfeeds
 
 # Development
-python-dotenv==1.0.1
+python-dotenv==1.2.2
