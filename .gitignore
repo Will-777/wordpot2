@@ -43,3 +43,6 @@ wordpot_local.conf
 .DS_Store
 Thumbs.db
 *.cast
+
+# Notes internes (repo privé wordpot2-hosting)
+CLAUDE.md
